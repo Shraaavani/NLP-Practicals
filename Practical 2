@@ -1,5 +1,6 @@
 #PRACTICAL 2
 # Run this first  (-pip install pandas nltk scikit-learn gensim)
+#Perform bag-of-words approach (count occurrence, normalized count occurrence), TF-IDF on data. Create embeddings using Word2Vec.  
 
 import pandas as pd
 import nltk
