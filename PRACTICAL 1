@@ -1,0 +1,58 @@
+#PRACTICAL 1
+
+import nltk
+from nltk.tokenize import (
+    WhitespaceTokenizer, WordPunctTokenizer,
+    TreebankWordTokenizer, TweetTokenizer, MWETokenizer
+)
+from nltk.stem import PorterStemmer, SnowballStemmer, WordNetLemmatizer
+
+# Download required datasets (run once)
+nltk.download('punkt')
+nltk.download('wordnet')
+nltk.download('omw-1.4')
+
+text = """The programmers are coding @AI_Lab! They're looking forward to the 2026 era. #Python"""
+
+words_to_stem = [
+    "program", "programs", "programmer",
+    "programming", "programmed", "feet", "was"
+]
+
+# 1. TOKENIZATION
+print("--- TOKENIZATION ---")
+print(f"Original: {text}\n")
+
+print(f"Whitespace:      {WhitespaceTokenizer().tokenize(text)}")
+print(f"WordPunct:       {WordPunctTokenizer().tokenize(text)}")
+print(f"Treebank:        {TreebankWordTokenizer().tokenize(text)}")
+print(f"Tweet:           {TweetTokenizer().tokenize(text)}")
+
+mwe = MWETokenizer([('looking', 'forward')])
+base_tokens = TreebankWordTokenizer().tokenize(text)
+print(f"MWE (looking_forward): {mwe.tokenize(base_tokens)}")
+
+print("\n" + "-"*30 + "\n")
+
+# 2. STEMMING & LEMMATIZATION
+print("--- STEMMING & LEMMATIZATION ---")
+
+ps = PorterStemmer()
+ss = SnowballStemmer("english")
+wnl = WordNetLemmatizer()
+
+header = f"{'Word':<12} | {'Porter':<12} | {'Snowball':<12} | {'Lemmatizer':<12}"
+print(header)
+print("-" * len(header))
+
+for word in words_to_stem:
+    p_stem = ps.stem(word)
+    s_stem = ss.stem(word)
+
+    # Better lemmatization
+    if word == "was":
+        lemma = wnl.lemmatize(word, pos='v')
+    else:
+        lemma = wnl.lemmatize(word)
+
+    print(f"{word:<12} | {p_stem:<12} | {s_stem:<12} | {lemma:<12}")
