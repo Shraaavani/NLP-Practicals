@@ -1,0 +1,75 @@
+#PRACTICAL 2
+# Run this first  (-pip install pandas nltk scikit-learn gensim)
+
+import pandas as pd
+import nltk
+from sklearn.feature_extraction.text import CountVectorizer, TfidfVectorizer
+from gensim.models import Word2Vec
+from nltk.tokenize import word_tokenize
+
+# Download required data (run once)
+nltk.download('punkt')
+nltk.download('punkt_tab')  
+
+# 1. Sample Data (Corpus)
+corpus = [
+    "The cat sat on the mat",
+    "The dog sat on the log",
+    "Cats and dogs are great pets",
+    "I love my pet dog and cat"
+]
+
+print("--- 1. BAG OF WORDS (Count Occurrence) ---")
+
+bow_vectorizer = CountVectorizer()
+bow_matrix = bow_vectorizer.fit_transform(corpus)
+
+df_bow = pd.DataFrame(
+    bow_matrix.toarray(),
+    columns=bow_vectorizer.get_feature_names_out()
+)
+print(df_bow)
+
+print("\n--- 2. NORMALIZED COUNT OCCURRENCE ---")
+
+norm_vectorizer = TfidfVectorizer(use_idf=False, norm='l2')
+norm_matrix = norm_vectorizer.fit_transform(corpus)
+
+df_norm = pd.DataFrame(
+    norm_matrix.toarray(),
+    columns=norm_vectorizer.get_feature_names_out()
+)
+print(df_norm.head(2))
+
+print("\n--- 3. TF-IDF ---")
+
+tfidf_vectorizer = TfidfVectorizer()
+tfidf_matrix = tfidf_vectorizer.fit_transform(corpus)
+
+df_tfidf = pd.DataFrame(
+    tfidf_matrix.toarray(),
+    columns=tfidf_vectorizer.get_feature_names_out()
+)
+print(df_tfidf)
+
+print("\n--- 4. WORD2VEC EMBEDDINGS ---")
+
+# Tokenization (fixed)
+tokenized_data = [word_tokenize(sentence.lower()) for sentence in corpus]
+
+# Train Word2Vec (workers=1 avoids Windows issues)
+model = Word2Vec(
+    sentences=tokenized_data,
+    vector_size=10,
+    window=2,
+    min_count=1,
+    workers=1
+)
+
+word = "dog"
+
+if word in model.wv:
+    print(f"Vector for '{word}' (first 5 values): {model.wv[word][:5]}")
+
+sim = model.wv.similarity('dog', 'cat')
+print(f"Cosine Similarity between 'dog' and 'cat': {sim:.4f}")
