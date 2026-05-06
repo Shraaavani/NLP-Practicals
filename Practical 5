@@ -1,0 +1,41 @@
+#PRACTICAL 5
+
+import pandas as pd
+
+# Format: { 'Suffix_Found': ('Delete_Length', 'Add_String') }
+rules = {
+    'iness': (5, 'y'),  # e.g., Happiness -> Happy
+    'ies': (3, 'y'),    # e.g., Cities -> City
+    'ning': (4, 'n'),   # e.g., Running -> Run
+    'ing': (3, ''),     # e.g., Playing -> Play
+    'ed': (2, ''),      # e.g., Played -> Play
+}
+
+def manual_stemmer(word):
+    word = word.lower()
+    for suffix, (delete_len, add_str) in rules.items():
+        if word.endswith(suffix):
+            # 1. Delete the suffix
+            root = word[:-delete_len]
+            # 2. Add the replacement string
+            stem = root + add_str
+            return stem, suffix, f"-{suffix}", f"+{add_str}"
+    
+    return word, "None", "0", "0"
+
+# Testing the Logic
+test_words = ["Cities", "Running", "Happiness", "Played", "Walking"]
+results = []
+
+for w in test_words:
+    stem, rule_name, deleted, added = manual_stemmer(w)
+    results.append([w, rule_name, deleted, added, stem])
+
+# Displaying as a Table
+df_morph = pd.DataFrame(
+    results,
+    columns=["Original Word", "Suffix Rule", "Delete", "Add", "Resulting Stem"]
+)
+
+print("--- Morphological Add-Delete Practical ---")
+print(df_morph.to_string(index=False))
