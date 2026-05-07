@@ -1,7 +1,6 @@
 #PRACTICAL 5
 #Morphology is the study of the way words are built up from smaller meaning bearing units. Study and understand the concepts of morphology by the use of add delete table 
 
-
 import pandas as pd   #To display output in tabular format.
 
 # Format: { 'Suffix_Found': ('Delete_Length', 'Add_String') }
@@ -22,7 +21,7 @@ def manual_stemmer(word):  # Defines a function for manual stemming.
             # 2. Add the replacement string
             stem = root + add_str
             return stem, suffix, f"-{suffix}", f"+{add_str}"  #Returns:stemmed word, applied rule, deleted suffix, added characters
-    
+                                                                  #f-string) in Python- It is used to insert variable values directly inside a string.
     return word, "None", "0", "0"   # if no suffix matches Original word is returned unchanged.
 
 
@@ -32,6 +31,7 @@ results = []   #Creates empty list to store output.
 for w in test_words:  #The loop takes one word at a time and stores it in variable w.
     stem, rule_name, deleted, added = manual_stemmer(w)   #Calls stemming function and stores returned values.
     results.append([w, rule_name, deleted, added, stem])  #Adds results into list. results is an empty list initially: append() adds one row of output into the list.
+#manual_stemmer() is a user-defined function that performs stemming using add-delete rules. The returned values are stored into variables using multiple assignment
 
 # Displaying as a Table
 df_morph = pd.DataFrame(  #Creates pandas DataFrame. Converts the list data into a table format.
@@ -43,3 +43,21 @@ print("--- Morphological Add-Delete Practical ---")  #Prints heading.
 print(df_morph.to_string(index=False))  #Displays DataFrame as formatted table without index numbers. to_string() Converts DataFrame into readable text table.
 #index=False:  Removes row numbers/index.
 #Time complexity? : O(n × m)
+
+'''
+1. This program performs rule-based stemming using the morphological add-delete operations where suffixes are removed and replacement strings are added to generate root word
+2. Morphology- Studies the word formation using rootword, prefixes and suffixes.
+3. Add-delete Rule- this rule performs two operations- delets suffix and add replacement characters
+4. Rule based Methods- are manually created lingustic rules to analyze words and language stucture
+5. Stemming- reducing words to their root or base form by removing suffixes or prefixes
+6. Lemmatization- Converting a word to its meaningful dictionary base form called a lemma
+7. Morphological Parsing- breaking a word into morphemes and identifying their grammatical functions
+8. Neural Network Model- AI based computational model inspied by human brain, in NLP it automatically learns language patterns from large datasets
+9. Transformer Model- AI Model that helps the computer understand the human language better. It reads words together and understand the meanaing based on the context using an "attention" mechanism
+10. Hidden Markov Model(HMM)- statistical model used to predict sequences where the states are hidden
+11. Tokenization- breaking text in smaller units calleed tokens such as words, sentences or characters
+12. Bag-of-words- sentence is converted into a list of words and their counts, doesn't care aboutt the grammar, meaning or the order of words, it only checks which words are present and how many times the words appears in the sentence
+13. TF-IDF- Term Frequency-Inverse Document Frequency is a method used to find the importance of a word in a document, if a word appears several times in a particular document it is important and if the same word appears several times in multiple documents it is less important
+14. Dictionary Based Method- is used for rules because it has organized stuctures, fast lookups, easy rule management.
+
+'''
