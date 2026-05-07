@@ -1,42 +1,45 @@
 #PRACTICAL 5
 #Morphology is the study of the way words are built up from smaller meaning bearing units. Study and understand the concepts of morphology by the use of add delete table 
 
-import pandas as pd
+
+import pandas as pd   #To display output in tabular format.
 
 # Format: { 'Suffix_Found': ('Delete_Length', 'Add_String') }
 rules = {
-    'iness': (5, 'y'),  # e.g., Happiness -> Happy
+    'iness': (5, 'y'),  # e.g., Happiness -> Happy  # If word ends with iness: delete 5 letters and add y
     'ies': (3, 'y'),    # e.g., Cities -> City
     'ning': (4, 'n'),   # e.g., Running -> Run
     'ing': (3, ''),     # e.g., Playing -> Play
-    'ed': (2, ''),      # e.g., Played -> Play
+    'ed': (2, ''),      # e.g., Played -> Play     #Can we add more rules? Yes. 'ment': (4, '')
 }
 
-def manual_stemmer(word):
-    word = word.lower()
-    for suffix, (delete_len, add_str) in rules.items():
-        if word.endswith(suffix):
+def manual_stemmer(word):  # Defines a function for manual stemming.
+    word = word.lower()     #Converts word to lowercase for uniform comparison (case-insensitive)
+    for suffix, (delete_len, add_str) in rules.items(): #Loops through all suffix rules.
+        if word.endswith(suffix):          #Checks whether a word ends with a specific suffix.
             # 1. Delete the suffix
-            root = word[:-delete_len]
+            root = word[:-delete_len]        #It removes characters from the end.
             # 2. Add the replacement string
             stem = root + add_str
-            return stem, suffix, f"-{suffix}", f"+{add_str}"
+            return stem, suffix, f"-{suffix}", f"+{add_str}"  #Returns:stemmed word, applied rule, deleted suffix, added characters
     
-    return word, "None", "0", "0"
+    return word, "None", "0", "0"   # if no suffix matches Original word is returned unchanged.
 
-# Testing the Logic
-test_words = ["Cities", "Running", "Happiness", "Played", "Walking"]
-results = []
 
-for w in test_words:
-    stem, rule_name, deleted, added = manual_stemmer(w)
-    results.append([w, rule_name, deleted, added, stem])
+test_words = ["Cities", "Running", "Happiness", "Played", "Walking"]   #List of words for testing.
+results = []   #Creates empty list to store output.
+
+for w in test_words:  #The loop takes one word at a time and stores it in variable w.
+    stem, rule_name, deleted, added = manual_stemmer(w)   #Calls stemming function and stores returned values.
+    results.append([w, rule_name, deleted, added, stem])  #Adds results into list. results is an empty list initially: append() adds one row of output into the list.
 
 # Displaying as a Table
-df_morph = pd.DataFrame(
-    results,
-    columns=["Original Word", "Suffix Rule", "Delete", "Add", "Resulting Stem"]
+df_morph = pd.DataFrame(  #Creates pandas DataFrame. Converts the list data into a table format.
+    results,    #Uses all rows stored in results.
+    columns=["Original Word", "Suffix Rule", "Delete", "Add", "Resulting Stem"]  #Sets column names for table.
 )
 
-print("--- Morphological Add-Delete Practical ---")
-print(df_morph.to_string(index=False))
+print("--- Morphological Add-Delete Practical ---")  #Prints heading.
+print(df_morph.to_string(index=False))  #Displays DataFrame as formatted table without index numbers. to_string() Converts DataFrame into readable text table.
+#index=False:  Removes row numbers/index.
+#Time complexity? : O(n × m)
